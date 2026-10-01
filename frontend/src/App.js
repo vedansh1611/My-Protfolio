@@ -186,7 +186,10 @@ function Home() {
     <main>
       <section className="hero" ref={heroRef} data-testid="hero-section">
         <div className="aurora" aria-hidden="true"><i /><i /><i /></div>
-        <motion.div className="hero-orbit" style={{ y: yOrbit }} animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} aria-hidden="true"><span /></motion.div>
+        <motion.div className="hero-orbit" style={{ y: yOrbit }}>
+          <motion.div className="orbit-rings" animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} aria-hidden="true"><span /></motion.div>
+          <div className="hero-photo" data-testid="hero-photo"><img src="/vedansh.png" alt="Portrait of Vedansh Gothi" /></div>
+        </motion.div>
         <motion.div className="hero-spark" animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.8, 0.35] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} aria-hidden="true" />
         <motion.div className="hero-top" initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5, duration: 0.8, ease: EASE }}>
           <span className="eyebrow">MUMBAI, INDIA</span>
