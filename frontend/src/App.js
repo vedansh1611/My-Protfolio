@@ -97,6 +97,17 @@ function Reveal({ children, delay = 0, className = "", ...rest }) {
   );
 }
 
+function ExperimentCard({ item, hidden, onOpen, testid }) {
+  const vidRef = useRef(null);
+  return (
+    <button type="button" className="video-card" onClick={() => onOpen(item)} onMouseEnter={() => { if (vidRef.current) vidRef.current.play().catch(() => {}); }} onMouseLeave={() => { if (vidRef.current) vidRef.current.pause(); }} aria-hidden={hidden} tabIndex={hidden ? -1 : undefined} data-testid={testid}>
+      <video ref={vidRef} src={item.video} poster={item.poster} muted loop playsInline preload="metadata" />
+      <span className="video-play"><Play size={15} fill="currentColor" /></span>
+      <span className="video-title mono">{item.title}</span>
+    </button>
+  );
+}
+
 function VideoModal({ video, onClose }) {
   useEffect(() => {
     const esc = (e) => { if (e.key === "Escape") onClose(); };
@@ -184,11 +195,17 @@ function ButtonLink({ to, children, secondary = false }) {
 }
 
 function ProjectCard({ project, index }) {
+  const vidRef = useRef(null);
+  const hasVideo = Boolean(project.video_url);
   return (
     <motion.div className={`project-cell project-${index % 4}`} initial={{ y: 60, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.9, delay: (index % 2) * 0.12, ease: EASE }}>
-      <Link to={`/work/${project.slug}`} className="project-card" data-testid={`project-card-${project.slug}`}>
+      <Link to={`/work/${project.slug}`} className="project-card" data-testid={`project-card-${project.slug}`} onMouseEnter={() => { if (hasVideo && vidRef.current) vidRef.current.play().catch(() => {}); }} onMouseLeave={() => { if (hasVideo && vidRef.current) vidRef.current.pause(); }}>
         <div className="project-image">
-          <img src={project.thumbnail} alt={`${project.title} project visual`} loading="lazy" />
+          {hasVideo ? (
+            <video ref={vidRef} src={project.video_url} poster={project.thumbnail} muted loop playsInline preload="metadata" data-testid={`card-preview-${project.slug}`} />
+          ) : (
+            <img src={project.thumbnail} alt={`${project.title} project visual`} loading="lazy" />
+          )}
           {project.isPlaceholder && <span className="placeholder-tag" data-testid={`placeholder-media-${project.slug}`}>Media placeholder</span>}
           {project.video_url && <span className="card-play" aria-hidden="true"><Play size={13} fill="currentColor" /></span>}
           <span className="view-pill">View <ArrowUpRight size={14} /></span>
@@ -286,11 +303,7 @@ function Home() {
         <Reveal delay={0.12} className="video-rail" data-testid="experiments-rail">
           <div className="video-track">
             {[0, 1].map((copy) => experiments.map((v, i) => (
-              <button type="button" className="video-card" key={`${copy}-${v.title}`} onClick={() => setActiveVideo(v)} aria-hidden={copy === 1} tabIndex={copy === 1 ? -1 : undefined} data-testid={copy === 0 ? `experiment-card-${i}` : undefined}>
-                <img src={v.poster} alt={`${v.title} video poster`} loading="lazy" />
-                <span className="video-play"><Play size={16} fill="currentColor" /></span>
-                <span className="video-title mono">{v.title}</span>
-              </button>
+              <ExperimentCard item={v} hidden={copy === 1} onOpen={setActiveVideo} testid={copy === 0 ? `experiment-card-${i}` : undefined} key={`${copy}-${v.title}`} />
             )))}
           </div>
         </Reveal>
