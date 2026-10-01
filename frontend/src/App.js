@@ -17,12 +17,7 @@ const services = [
   ["EDITING + MOTION", "Cuts, pacing and movement that give ideas a pulse."],
   ["GRAPHIC DESIGN", "Visual systems that hold a point of view."],
 ];
-const experiments = [
-  { title: "Nexus Interface Reel", poster: "/videos/v1.jpg", video: "/videos/v1.mp4" },
-  { title: "Motion — 3D Title Study", poster: "/videos/v2.jpg", video: "/videos/v2.mp4" },
-  { title: "Product Film — Dark Metal", poster: "/videos/v3.jpg", video: "/videos/v3.mp4" },
-  { title: "Kinetic Type Study", poster: "/videos/v4.jpg", video: "/videos/v4.mp4" },
-];
+const passions = ["Designing", "Travel", "Adventure", "Gaming"];
 
 function useLenis() {
   useEffect(() => {
@@ -97,74 +92,49 @@ function Reveal({ children, delay = 0, className = "", ...rest }) {
   );
 }
 
-function ExperimentCard({ item, hidden, onOpen, testid }) {
-  const vidRef = useRef(null);
-  return (
-    <button type="button" className="video-card" onClick={() => onOpen(item)} onMouseEnter={() => { if (vidRef.current) vidRef.current.play().catch(() => {}); }} onMouseLeave={() => { if (vidRef.current) vidRef.current.pause(); }} aria-hidden={hidden} tabIndex={hidden ? -1 : undefined} data-testid={testid}>
-      <video ref={vidRef} src={item.video} poster={item.poster} muted loop playsInline preload="metadata" />
-      <span className="video-play"><Play size={15} fill="currentColor" /></span>
-      <span className="video-title mono">{item.title}</span>
-    </button>
-  );
-}
-
-function VideoModal({ video, onClose }) {
+function useSectionSpy(ids, fallback) {
+  const { pathname } = useLocation();
+  const [active, setActive] = useState(fallback);
   useEffect(() => {
-    const esc = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", esc);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
-  }, [onClose]);
-  return (
-    <motion.div className="video-modal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} data-testid="video-modal">
-      <motion.div className="video-modal-inner" initial={{ scale: 0.92, y: 26 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.94, y: 14 }} transition={{ duration: 0.4, ease: EASE }} onClick={(e) => e.stopPropagation()}>
-        <video src={video.video} poster={video.poster} controls autoPlay playsInline data-testid="video-player" />
-        <div className="video-modal-bar">
-          <span className="mono">{video.title}</span>
-          <button type="button" onClick={onClose} aria-label="Close video" data-testid="video-modal-close"><X size={18} /></button>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
+    if (pathname !== "/") { setActive("work"); return undefined; }
+    setActive(fallback);
+    const observer = new IntersectionObserver(
+      (entries) => { entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); }); },
+      { rootMargin: "-35% 0px -55% 0px" },
+    );
+    ids.forEach((id) => { const el = document.getElementById(id); if (el) observer.observe(el); });
+    const onScroll = () => { if (window.scrollY < 350) setActive(fallback); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { observer.disconnect(); window.removeEventListener("scroll", onScroll); };
+  }, [pathname, fallback]);
+  return { pathname, active };
 }
 
 function Nav() {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
+  const { pathname, active } = useSectionSpy(["work", "services", "about", "contact"], "home");
   const goHome = (e) => {
     setOpen(false);
     if (pathname === "/") { e.preventDefault(); window.scrollTo(0, 0); }
   };
+  const cls = (id) => (active === id ? "active" : "");
   return (
     <motion.nav className="nav" initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 0.8, ease: EASE }} data-testid="site-navigation">
       <Link to="/" className="wordmark" onClick={goHome} data-testid="home-link">VED<span>©</span></Link>
       <div className={`nav-links ${open ? "open" : ""}`}>
-        <Link to="/" onClick={goHome} data-testid="nav-home-link">Home</Link>
-        <Link to="/work" onClick={() => setOpen(false)} data-testid="work-nav-link">Work</Link>
-        <a href="/#services" onClick={() => setOpen(false)} data-testid="services-nav-link">Services</a>
-        <a href="/#experiments" onClick={() => setOpen(false)} data-testid="experiments-nav-link">Experiments</a>
-        <a href="/#about" onClick={() => setOpen(false)} data-testid="about-nav-link">About</a>
-        <a href="/#contact" onClick={() => setOpen(false)} data-testid="contact-nav-link">Contact</a>
+        <Link to="/" className={cls("home")} onClick={goHome} data-testid="nav-home-link">Home</Link>
+        <Link to="/work" className={cls("work")} onClick={() => setOpen(false)} data-testid="work-nav-link">Work</Link>
+        <a href="/#services" className={cls("services")} onClick={() => setOpen(false)} data-testid="services-nav-link">Services</a>
+        <a href="/#about" className={cls("about")} onClick={() => setOpen(false)} data-testid="about-nav-link">About</a>
+        <a href="/#contact" className={cls("contact")} onClick={() => setOpen(false)} data-testid="contact-nav-link">Contact</a>
       </div>
       <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="Toggle menu" data-testid="mobile-menu-button">{open ? <X /> : <Menu />}</button>
     </motion.nav>
   );
 }
 
-function FloatingNav() {
-  const { pathname } = useLocation();
-  const [active, setActive] = useState("");
-  useEffect(() => {
-    if (pathname !== "/") { setActive("work"); return undefined; }
-    setActive("");
-    const ids = ["work", "services", "experiments", "about", "contact"];
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); }); },
-      { rootMargin: "-35% 0px -55% 0px" },
-    );
-    ids.forEach((id) => { const el = document.getElementById(id); if (el) observer.observe(el); });
-    return () => observer.disconnect();
-  }, [pathname]);
+function FloatingContact() {
+  const { pathname, active } = useSectionSpy(["work", "services", "about", "contact"], "");
   const anchor = (id) => (pathname === "/" ? `#${id}` : `/#${id}`);
   return (
     <motion.a href={anchor("contact")} className={`contact-float ${active === "contact" ? "active" : ""}`} initial={{ y: 90, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 0.9, ease: EASE }} data-testid="floating-contact-button">
@@ -217,7 +187,6 @@ function ProjectCard({ project, index }) {
 
 function Home() {
   const heroRef = useRef(null);
-  const [activeVideo, setActiveVideo] = useState(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.5 });
   const yContent = useTransform(smooth, [0, 1], [0, 150]);
@@ -290,25 +259,8 @@ function Home() {
         </div>
       </section>
 
-      <section className="section experiments" id="experiments">
-        <Reveal><SectionLabel number="3">EXPERIMENTS</SectionLabel></Reveal>
-        <div className="experiment-grid">
-          <Reveal><div><span className="mono">01 / AI IMAGE + VIDEO</span><h2>Curiosity<br /><em>in motion.</em></h2></div></Reveal>
-          <Reveal delay={0.1}><p>Small studies in generative image, motion, sound and interaction — a space for testing what a new tool can make possible.</p></Reveal>
-        </div>
-        <Reveal delay={0.12} className="video-rail" data-testid="experiments-rail">
-          <div className="video-track">
-            {[0, 1].map((copy) => experiments.map((v, i) => (
-              <ExperimentCard item={v} hidden={copy === 1} onOpen={setActiveVideo} testid={copy === 0 ? `experiment-card-${i}` : undefined} key={`${copy}-${v.title}`} />
-            )))}
-          </div>
-        </Reveal>
-      </section>
-
-      <AnimatePresence>{activeVideo && <VideoModal video={activeVideo} onClose={() => setActiveVideo(null)} />}</AnimatePresence>
-
       <section className="section about" id="about">
-        <Reveal><SectionLabel number="4">ABOUT / APPROACH</SectionLabel></Reveal>
+        <Reveal><SectionLabel number="3">ABOUT / APPROACH</SectionLabel></Reveal>
         <div className="about-grid">
           <Reveal><h2>Design as<br /><em>an ecosystem.</em></h2></Reveal>
           <Reveal delay={0.12}>
@@ -323,16 +275,16 @@ function Home() {
             </div>
           </Reveal>
         </div>
-      </section>
-
-      <section className="section experience">
-        <Reveal><SectionLabel number="5">EXPERIENCE / EDUCATION</SectionLabel></Reveal>
-        <div className="timeline">
-          {[["NOV 2024 — APR 2025", "UI/UX Design Intern", "Intellectsia AI · Mumbai, Maharashtra"],
-            ["2022 — 2026", "B.E. Information Technology", "Atharva College of Engineering / Mumbai University"],
-            ["ONGOING", "Community & leadership", "CSI management team leader · GDSC member · Hackathons & bootcamps"]].map(([d, t, s], i) => (
-            <Reveal delay={i * 0.08} key={t}><div className="timeline-cell"><span className="mono">{d}</span><h3>{t}</h3><p>{s}</p></div></Reveal>
-          ))}
+        <div className="passions" data-testid="passions-section">
+          <Reveal><span className="mono">THINGS I LOVE TO DO</span></Reveal>
+          <div className="passions-grid">
+            {passions.map((p, i) => (
+              <Reveal className="passion" delay={i * 0.06} key={p} data-testid={`passion-${p.toLowerCase()}`}>
+                <span>0{i + 1}</span>
+                <h3>{p}</h3>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -363,7 +315,7 @@ function Contact() {
   };
   return (
     <section className="section contact" id="contact">
-      <Reveal><SectionLabel number="6">GET IN TOUCH</SectionLabel></Reveal>
+      <Reveal><SectionLabel number="4">GET IN TOUCH</SectionLabel></Reveal>
       <div className="contact-heading">
         <Reveal><div><span className="contact-kicker">AVAILABLE FOR SELECT PROJECTS</span><h2>Let’s make<br /><em>something real.</em></h2></div></Reveal>
         <Reveal delay={0.12}><p>Have an idea, a rough direction, or just a question? Send it over. I’ll get back to you with a thoughtful next step.</p></Reveal>
@@ -480,7 +432,7 @@ export default function App() {
           <Route path="/work" element={<Work />} />
           <Route path="/work/:slug" element={<ProjectDetail />} />
         </Routes>
-        <FloatingNav />
+        <FloatingContact />
         <footer>
           <span className="wordmark">VED<span>©</span></span>
           <span className="mono">© 2026 / MADE IN MUMBAI</span>
