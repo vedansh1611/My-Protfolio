@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BrowserRouter, Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
-import { ArrowUpRight, ChevronRight, Menu, X, ArrowDown, Mail } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Menu, X, ArrowDown, Mail, Play } from "lucide-react";
 import Lenis from "lenis";
 import axios from "axios";
 import { projects } from "@/data/projects";
@@ -16,6 +16,14 @@ const services = [
   ["AI VIDEO + VISUALS", "New visual languages, directed with intention."],
   ["EDITING + MOTION", "Cuts, pacing and movement that give ideas a pulse."],
   ["GRAPHIC DESIGN", "Visual systems that hold a point of view."],
+];
+const experiments = [
+  { title: "Chrome Reverie", poster: "https://images.unsplash.com/photo-1650756697432-98d1a1448cab?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
+  { title: "Liquid Identity", poster: "https://images.unsplash.com/photo-1688407368246-df0f8608f99b?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
+  { title: "Neon Horizon", poster: "https://images.unsplash.com/photo-1761956424993-ec18823d462a?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
+  { title: "Neon Figure", poster: "https://images.unsplash.com/photo-1613698808499-f772ccb4f527?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
+  { title: "Red Tide Study", poster: "https://images.unsplash.com/photo-1605737310884-5cfb93acc59e?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
+  { title: "Crimson Signal", poster: "https://images.unsplash.com/photo-1762274674115-a511e3d3c688?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
 ];
 
 function useLenis() {
@@ -254,8 +262,18 @@ function Home() {
         <div className="experiment-grid">
           <Reveal><div><span className="mono">01 / AI IMAGE + VIDEO</span><h2>Curiosity<br /><em>in motion.</em></h2></div></Reveal>
           <Reveal delay={0.1}><p>Small studies in generative image, motion, sound and interaction — a space for testing what a new tool can make possible.</p></Reveal>
-          <Reveal delay={0.18}><div className="experiment-orbit" aria-hidden="true"><span>AI</span><span>FRAME</span><span>FORM</span></div></Reveal>
         </div>
+        <Reveal delay={0.12} className="video-rail" data-testid="experiments-rail">
+          <div className="video-track">
+            {[0, 1].map((copy) => experiments.map((v) => (
+              <div className="video-card" key={`${copy}-${v.title}`} aria-hidden={copy === 1} data-testid={copy === 0 ? `experiment-card-${v.title.toLowerCase().replace(/\s+/g, "-")}` : undefined}>
+                <img src={v.poster} alt={`${v.title} video poster`} loading="lazy" />
+                <span className="video-play"><Play size={16} fill="currentColor" /></span>
+                <span className="video-title mono">{v.title}</span>
+              </div>
+            )))}
+          </div>
+        </Reveal>
       </section>
 
       <section className="section about" id="about">

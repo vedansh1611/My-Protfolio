@@ -62,6 +62,35 @@
       "category": "portrait",
       "url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=85&w=800&auto=format&fit=crop",
       "description": "Professional silhouette portrait placeholder"
+    },
+    {
+      "category": "experiment_video_posters",
+      "items": [
+        {
+          "url": "https://images.unsplash.com/photo-1650756697432-98d1a1448cab?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop",
+          "description": "Surreal liquid chrome metallic head emerging from dark waters."
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1688407368246-df0f8608f99b?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop",
+          "description": "Iridescent chrome sphere and surreal metallic face reflection."
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1761956424993-ec18823d462a?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop",
+          "description": "Futuristic cyberpunk neon architecture reflected across dark waters at dusk."
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1613698808499-f772ccb4f527?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop",
+          "description": "Cinematic surreal figure illuminated by vibrant neon purple and pink tones."
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1605737310884-5cfb93acc59e?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop",
+          "description": "Atmospheric dark water scene with red horizon and surreal reflective figure."
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1762274674115-a511e3d3c688?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop",
+          "description": "High-contrast cyberpunk portrait in crimson and electric blue illumination."
+        }
+      ]
     }
   ]
 }
