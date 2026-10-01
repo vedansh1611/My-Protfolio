@@ -110,16 +110,30 @@ function Nav() {
 
 function FloatingNav() {
   const { pathname } = useLocation();
+  const [active, setActive] = useState("");
+  useEffect(() => {
+    if (pathname !== "/") { setActive("work"); return undefined; }
+    setActive("");
+    const ids = ["work", "services", "experiments", "about", "contact"];
+    const observer = new IntersectionObserver(
+      (entries) => { entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); }); },
+      { rootMargin: "-35% 0px -55% 0px" },
+    );
+    ids.forEach((id) => { const el = document.getElementById(id); if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, [pathname]);
   const anchor = (id) => (pathname === "/" ? `#${id}` : `/#${id}`);
+  const slider = (id) => (active === id ? <motion.span className="nav-slider" layoutId="nav-slider" transition={{ type: "spring", stiffness: 350, damping: 32 }} /> : null);
+  const linkCls = (id) => (active === id ? "active" : "");
   return (
     <>
       <motion.nav className="floating-nav" style={{ x: "-50%" }} initial={{ y: 90, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 0.9, ease: EASE }} aria-label="Quick navigation" data-testid="floating-navigation">
-        <Link to="/work" data-testid="floating-work-link">Work</Link>
-        <a href={anchor("services")} data-testid="floating-services-link">Services</a>
-        <a href={anchor("experiments")} data-testid="floating-experiments-link">Experiments</a>
-        <a href={anchor("about")} data-testid="floating-about-link">About</a>
+        <Link to="/work" className={linkCls("work")} data-testid="floating-work-link">{slider("work")}<span>Work</span></Link>
+        <a href={anchor("services")} className={linkCls("services")} data-testid="floating-services-link">{slider("services")}<span>Services</span></a>
+        <a href={anchor("experiments")} className={linkCls("experiments")} data-testid="floating-experiments-link">{slider("experiments")}<span>Experiments</span></a>
+        <a href={anchor("about")} className={linkCls("about")} data-testid="floating-about-link">{slider("about")}<span>About</span></a>
       </motion.nav>
-      <motion.a href={anchor("contact")} className="contact-float" initial={{ y: 90, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2.15, duration: 0.9, ease: EASE }} data-testid="floating-contact-button">
+      <motion.a href={anchor("contact")} className={`contact-float ${active === "contact" ? "active" : ""}`} initial={{ y: 90, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2.15, duration: 0.9, ease: EASE }} data-testid="floating-contact-button">
         <span>Start a project</span><ArrowUpRight size={16} />
       </motion.a>
     </>
@@ -164,13 +178,14 @@ function ProjectCard({ project, index }) {
 function Home() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const yContent = useTransform(scrollYProgress, [0, 1], [0, 170]);
-  const fade = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const yOrbit = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.5 });
+  const yContent = useTransform(smooth, [0, 1], [0, 150]);
+  const fade = useTransform(smooth, [0, 0.75], [1, 0]);
+  const yOrbit = useTransform(smooth, [0, 1], [0, -130]);
   return (
     <main>
       <section className="hero" ref={heroRef} data-testid="hero-section">
-        <div className="hero-glow" />
+        <div className="aurora" aria-hidden="true"><i /><i /><i /></div>
         <motion.div className="hero-orbit" style={{ y: yOrbit }} animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} aria-hidden="true"><span /></motion.div>
         <motion.div className="hero-spark" animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.8, 0.35] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} aria-hidden="true" />
         <motion.div className="hero-top" initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5, duration: 0.8, ease: EASE }}>
