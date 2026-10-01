@@ -318,7 +318,7 @@ function Home() {
       <section className="section experience">
         <Reveal><SectionLabel number="5">EXPERIENCE / EDUCATION</SectionLabel></Reveal>
         <div className="timeline">
-          {[["NOV 2024 — APR 2025", "UI/UX Design Intern", "Intellectsia AI"],
+          {[["NOV 2024 — APR 2025", "UI/UX Design Intern", "Intellectsia AI · Mumbai, Maharashtra"],
             ["2022 — 2026", "B.E. Information Technology", "Atharva College of Engineering / Mumbai University"],
             ["ONGOING", "Community & leadership", "CSI management team leader · GDSC member · Hackathons & bootcamps"]].map(([d, t, s], i) => (
             <Reveal delay={i * 0.08} key={t}><div className="timeline-cell"><span className="mono">{d}</span><h3>{t}</h3><p>{s}</p></div></Reveal>
@@ -426,8 +426,16 @@ function ProjectDetail() {
           <a href={project.video_url} target="_blank" rel="noreferrer" data-testid="project-video-link">Watch the film <ArrowUpRight size={18} /></a>
         </Reveal>
       )}
+      {project.highlights && (
+        <div className="highlights" data-testid="project-highlights">
+          <Reveal><SectionLabel number="2">WHAT I DELIVERED</SectionLabel></Reveal>
+          {project.highlights.map((h, i) => (
+            <Reveal className="highlight-row" delay={i * 0.05} key={h}><span>0{i + 1}</span><p>{h}</p></Reveal>
+          ))}
+        </div>
+      )}
       <div className="process">
-        <Reveal><SectionLabel number="2">PROCESS</SectionLabel></Reveal>
+        <Reveal><SectionLabel number={project.highlights ? "3" : "2"}>PROCESS</SectionLabel></Reveal>
         {project.process.map((x, i) => (
           <Reveal className="process-row" delay={i * 0.07} key={x}><span>0{i + 1}</span><h2>{x}</h2></Reveal>
         ))}
