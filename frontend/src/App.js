@@ -18,12 +18,10 @@ const services = [
   ["GRAPHIC DESIGN", "Visual systems that hold a point of view."],
 ];
 const experiments = [
-  { title: "Chrome Reverie", poster: "https://images.unsplash.com/photo-1650756697432-98d1a1448cab?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
-  { title: "Liquid Identity", poster: "https://images.unsplash.com/photo-1688407368246-df0f8608f99b?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
-  { title: "Neon Horizon", poster: "https://images.unsplash.com/photo-1761956424993-ec18823d462a?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
-  { title: "Neon Figure", poster: "https://images.unsplash.com/photo-1613698808499-f772ccb4f527?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
-  { title: "Red Tide Study", poster: "https://images.unsplash.com/photo-1605737310884-5cfb93acc59e?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
-  { title: "Crimson Signal", poster: "https://images.unsplash.com/photo-1762274674115-a511e3d3c688?crop=entropy&cs=srgb&fm=jpg&q=85&w=800&h=1067&fit=crop" },
+  { title: "Nexus Interface Reel", poster: "/videos/v1.jpg", video: "/videos/v1.mp4" },
+  { title: "Motion — 3D Title Study", poster: "/videos/v2.jpg", video: "/videos/v2.mp4" },
+  { title: "Product Film — Dark Metal", poster: "/videos/v3.jpg", video: "/videos/v3.mp4" },
+  { title: "Kinetic Type Study", poster: "/videos/v4.jpg", video: "/videos/v4.mp4" },
 ];
 
 function useLenis() {
@@ -95,6 +93,26 @@ function Reveal({ children, delay = 0, className = "", ...rest }) {
   return (
     <motion.div className={className} initial={{ y: 44, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, margin: "-70px" }} transition={{ duration: 0.95, delay, ease: EASE }} {...rest}>
       {children}
+    </motion.div>
+  );
+}
+
+function VideoModal({ video, onClose }) {
+  useEffect(() => {
+    const esc = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", esc);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
+  }, [onClose]);
+  return (
+    <motion.div className="video-modal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} data-testid="video-modal">
+      <motion.div className="video-modal-inner" initial={{ scale: 0.92, y: 26 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.94, y: 14 }} transition={{ duration: 0.4, ease: EASE }} onClick={(e) => e.stopPropagation()}>
+        <video src={video.video} poster={video.poster} controls autoPlay playsInline data-testid="video-player" />
+        <div className="video-modal-bar">
+          <span className="mono">{video.title}</span>
+          <button type="button" onClick={onClose} aria-label="Close video" data-testid="video-modal-close"><X size={18} /></button>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -185,6 +203,7 @@ function ProjectCard({ project, index }) {
 
 function Home() {
   const heroRef = useRef(null);
+  const [activeVideo, setActiveVideo] = useState(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.5 });
   const yContent = useTransform(smooth, [0, 1], [0, 150]);
@@ -265,16 +284,18 @@ function Home() {
         </div>
         <Reveal delay={0.12} className="video-rail" data-testid="experiments-rail">
           <div className="video-track">
-            {[0, 1].map((copy) => experiments.map((v) => (
-              <div className="video-card" key={`${copy}-${v.title}`} aria-hidden={copy === 1} data-testid={copy === 0 ? `experiment-card-${v.title.toLowerCase().replace(/\s+/g, "-")}` : undefined}>
+            {[0, 1].map((copy) => experiments.map((v, i) => (
+              <button type="button" className="video-card" key={`${copy}-${v.title}`} onClick={() => setActiveVideo(v)} aria-hidden={copy === 1} tabIndex={copy === 1 ? -1 : undefined} data-testid={copy === 0 ? `experiment-card-${i}` : undefined}>
                 <img src={v.poster} alt={`${v.title} video poster`} loading="lazy" />
                 <span className="video-play"><Play size={16} fill="currentColor" /></span>
                 <span className="video-title mono">{v.title}</span>
-              </div>
+              </button>
             )))}
           </div>
         </Reveal>
       </section>
+
+      <AnimatePresence>{activeVideo && <VideoModal video={activeVideo} onClose={() => setActiveVideo(null)} />}</AnimatePresence>
 
       <section className="section about" id="about">
         <Reveal><SectionLabel number="4">ABOUT / APPROACH</SectionLabel></Reveal>
