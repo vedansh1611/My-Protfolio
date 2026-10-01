@@ -130,10 +130,16 @@ function VideoModal({ video, onClose }) {
 
 function Nav() {
   const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+  const goHome = (e) => {
+    setOpen(false);
+    if (pathname === "/") { e.preventDefault(); window.scrollTo(0, 0); }
+  };
   return (
     <motion.nav className="nav" initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 0.8, ease: EASE }} data-testid="site-navigation">
-      <Link to="/" className="wordmark" data-testid="home-link">VED<span>©</span></Link>
+      <Link to="/" className="wordmark" onClick={goHome} data-testid="home-link">VED<span>©</span></Link>
       <div className={`nav-links ${open ? "open" : ""}`}>
+        <Link to="/" onClick={goHome} data-testid="nav-home-link">Home</Link>
         <Link to="/work" onClick={() => setOpen(false)} data-testid="work-nav-link">Work</Link>
         <a href="/#services" onClick={() => setOpen(false)} data-testid="services-nav-link">Services</a>
         <a href="/#experiments" onClick={() => setOpen(false)} data-testid="experiments-nav-link">Experiments</a>

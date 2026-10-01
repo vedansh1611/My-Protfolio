@@ -25,7 +25,8 @@ em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-s
 .scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--grad);transform-origin:0 50%;z-index:80}
 
 /* nav */
-.nav{height:82px;position:absolute;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
+.nav{height:82px;position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(251,251,253,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+#work,#services,#experiments,#about,#contact{scroll-margin-top:82px}
 .wordmark{font:700 20px/1 'Sora',sans-serif;letter-spacing:-.06em;color:var(--ink);text-decoration:none}
 .wordmark span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:10px;vertical-align:top;margin-left:4px}
 .nav-links{display:flex;gap:34px}
