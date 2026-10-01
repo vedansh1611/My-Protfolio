@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -8,6 +8,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 import uuid
+import time
 from datetime import datetime, timezone
 
 
@@ -42,10 +43,13 @@ class ContactSubmission(BaseModel):
     email: str
     project_type: str
     message: str
+    website: str = ""
 
 class ContactSubmissionResponse(ContactSubmission):
     id: str
     created_at: str
+
+contact_attempts = {}
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
@@ -53,7 +57,15 @@ async def root():
     return {"message": "Ved portfolio API"}
 
 @api_router.post("/contact", response_model=ContactSubmissionResponse)
-async def create_contact_submission(input: ContactSubmission):
+async def create_contact_submission(input: ContactSubmission, request: Request):
+    if input.website:
+        raise HTTPException(status_code=400, detail="Spam check failed")
+    client_ip = request.client.host if request.client else "unknown"
+    now = time.monotonic()
+    recent = [stamp for stamp in contact_attempts.get(client_ip, []) if now - stamp < 300]
+    if len(recent) >= 3:
+        raise HTTPException(status_code=429, detail="Please wait before sending another message")
+    contact_attempts[client_ip] = [*recent, now]
     submission = ContactSubmissionResponse(
         id=str(uuid.uuid4()),
         created_at=datetime.now(timezone.utc).isoformat(),
