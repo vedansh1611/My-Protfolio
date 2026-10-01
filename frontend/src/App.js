@@ -160,20 +160,10 @@ function FloatingNav() {
     return () => observer.disconnect();
   }, [pathname]);
   const anchor = (id) => (pathname === "/" ? `#${id}` : `/#${id}`);
-  const slider = (id) => (active === id ? <motion.span className="nav-slider" layoutId="nav-slider" transition={{ type: "spring", stiffness: 350, damping: 32 }} /> : null);
-  const linkCls = (id) => (active === id ? "active" : "");
   return (
-    <>
-      <motion.nav className="floating-nav" style={{ x: "-50%" }} initial={{ y: 90, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 0.9, ease: EASE }} aria-label="Quick navigation" data-testid="floating-navigation">
-        <Link to="/work" className={linkCls("work")} data-testid="floating-work-link">{slider("work")}<span>Work</span></Link>
-        <a href={anchor("services")} className={linkCls("services")} data-testid="floating-services-link">{slider("services")}<span>Services</span></a>
-        <a href={anchor("experiments")} className={linkCls("experiments")} data-testid="floating-experiments-link">{slider("experiments")}<span>Experiments</span></a>
-        <a href={anchor("about")} className={linkCls("about")} data-testid="floating-about-link">{slider("about")}<span>About</span></a>
-      </motion.nav>
-      <motion.a href={anchor("contact")} className={`contact-float ${active === "contact" ? "active" : ""}`} initial={{ y: 90, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2.15, duration: 0.9, ease: EASE }} data-testid="floating-contact-button">
-        <span>Start a project</span><ArrowUpRight size={16} />
-      </motion.a>
-    </>
+    <motion.a href={anchor("contact")} className={`contact-float ${active === "contact" ? "active" : ""}`} initial={{ y: 90, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 0.9, ease: EASE }} data-testid="floating-contact-button">
+      <span>Start a project</span><ArrowUpRight size={16} />
+    </motion.a>
   );
 }
 
