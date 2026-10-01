@@ -27,9 +27,16 @@ Build a production-quality personal portfolio website for a multi-disciplinary c
 7. Custom cursor, scroll progress bar, intro loader, slow editorial marquee, grain overlay.
 8. SVG favicon mark (lime asterisk on dark) matching wordmark motif.
 
+## Design system (current)
+- LIGHT editorial theme (user-requested redesign 2026-07-01): bg #FBFBFD, ink #0D0D12, muted #6E6E7A, accents cyan #0ED2DA → violet #5F29C7 gradient.
+- Hero background: white top fading into cyan→violet gradient at bottom, faint vertical grid lines (56px) masked to fade by 70% — based on user's reference pattern.
+- Typography: Sora (headings/body), Instrument Serif italic with gradient text for accents, JetBrains Mono for labels.
+- Gradient pill buttons, white glass floating nav + contact float, gradient scroll progress, cyan/violet custom cursor, light loader, SVG favicon (gradient asterisk on light tile).
+- Hero name: "Vedansh Gothi." (renamed from Vedanshkumar Gothi per user).
+
 ## Implemented
-- 2026-07-01 (this session): Fixed blocking lint errors (unused `Request` param in server.py; pointerX/pointerY scope bug in SmokeCanvas — pointer tracking moved to window listener so smoke actually follows the cursor).
-- 2026-07-01: Full award-polish pass — Lenis, custom cursor, intro loader, masked hero reveal, scroll progress, global grain, redesigned dark contact section with glass form, floating pill nav + contact float styled (CSS was missing), serif italic accents (Instrument Serif), SVG favicon, page title/meta, pill buttons, project image clipped-frame + spotlight hover, process rows numbered, seamless duplicated marquee, mobile hero clipping fixed (375px).
+- 2026-07-01 (later): Full light-theme re-skin to cyan #0ED2DA / violet #5F29C7 per user's pattern reference; hero pattern background; hero renamed to "Vedansh Gothi"; typography moved from Space Grotesk to Sora; gradient favicon; all components re-colored (nav, floating dock, buttons, filters, forms, footer, cursor, loader). Smoke canvas removed in favor of the pattern hero.
+- 2026-07-01 (earlier): Fixed blocking lint errors (unused `Request` param in server.py; pointerX/pointerY scope bug in SmokeCanvas). Award-polish pass — Lenis, custom cursor, intro loader, masked hero reveal, scroll progress, grain, floating pill nav + contact float, process rows numbered, seamless duplicated marquee.
 - Earlier sessions: scaffolding, backend API + MongoDB, routing, project data, resume link, honeypot protection, rate limiter removed.
 
 ## Verified

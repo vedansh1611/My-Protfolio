@@ -75,40 +75,6 @@ function Loader({ show }) {
   );
 }
 
-function SmokeCanvas() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const canvas = ref.current;
-    const ctx = canvas.getContext("2d");
-    let frame;
-    let t = 0;
-    let pointerX = 0.62;
-    let pointerY = 0.38;
-    const resize = () => { canvas.width = window.innerWidth / 2; canvas.height = window.innerHeight / 2; };
-    resize();
-    window.addEventListener("resize", resize);
-    const onMove = (e) => { pointerX = e.clientX / window.innerWidth; pointerY = e.clientY / window.innerHeight; };
-    window.addEventListener("mousemove", onMove);
-    const draw = () => {
-      t += 0.004;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const g = ctx.createRadialGradient(
-        canvas.width * (pointerX + Math.sin(t) * 0.08), canvas.height * (pointerY + Math.cos(t * 0.7) * 0.1), 0,
-        canvas.width * 0.55, canvas.height * 0.45, canvas.width * 0.7,
-      );
-      g.addColorStop(0, "rgba(198,255,61,.16)");
-      g.addColorStop(0.32, "rgba(72,85,53,.08)");
-      g.addColorStop(1, "rgba(10,10,11,0)");
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      frame = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => { cancelAnimationFrame(frame); window.removeEventListener("resize", resize); window.removeEventListener("mousemove", onMove); };
-  }, []);
-  return <canvas ref={ref} className="smoke-canvas" aria-hidden="true" />;
-}
-
 function MaskedLine({ children, delay = 0 }) {
   return (
     <span className="mask-line">
@@ -204,7 +170,6 @@ function Home() {
   return (
     <main>
       <section className="hero" ref={heroRef} data-testid="hero-section">
-        <SmokeCanvas />
         <div className="hero-glow" />
         <motion.div className="hero-orbit" style={{ y: yOrbit }} animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} aria-hidden="true"><span /></motion.div>
         <motion.div className="hero-spark" animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.8, 0.35] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} aria-hidden="true" />
@@ -215,7 +180,7 @@ function Home() {
         <motion.div className="hero-content" style={{ y: yContent, opacity: fade }}>
           <motion.p className="eyebrow hero-kicker" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.45, duration: 0.8 }}>MULTI-DISCIPLINARY CREATIVE</motion.p>
           <h1 data-testid="hero-name">
-            <MaskedLine delay={1.5}>Vedansh<span className="hero-muted">kumar</span></MaskedLine>
+            <MaskedLine delay={1.5}>Vedansh</MaskedLine>
             <MaskedLine delay={1.62}>Gothi<span className="dot">.</span></MaskedLine>
           </h1>
           <motion.div initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.85, duration: 0.9, ease: EASE }}>

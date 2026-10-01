@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html,body,#root{margin:0;min-height:100%;font-family:'Space Grotesk',sans-serif}::selection{background:#c6ff3d;color:#0a0a0b}:focus-visible{outline:2px solid #c6ff3d;outline-offset:4px}
+html,body,#root{margin:0;min-height:100%;font-family:'Sora',sans-serif}::selection{background:#0ed2da;color:#fff}:focus-visible{outline:2px solid #5f29c7;outline-offset:4px}
