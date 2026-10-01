@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi import FastAPI, APIRouter
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -8,7 +8,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 import uuid
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 
 ROOT_DIR = Path(__file__).parent
@@ -54,16 +54,10 @@ async def root():
     return {"message": "Ved portfolio API"}
 
 @api_router.post("/contact", response_model=ContactSubmissionResponse)
-async def create_contact_submission(input: ContactSubmission, request: Request):
+async def create_contact_submission(input: ContactSubmission):
     if input.website:
+        from fastapi import HTTPException
         raise HTTPException(status_code=400, detail="Spam check failed")
-    forwarded_for = request.headers.get("x-forwarded-for", "")
-    client_ip = forwarded_for.split(",")[0].strip() or (request.client.host if request.client else "unknown")
-    cutoff = datetime.now(timezone.utc) - timedelta(minutes=5)
-    recent_count = await db.contact_rate_limits.count_documents({"ip": client_ip, "created_at": {"$gt": cutoff}})
-    if recent_count >= 3:
-        raise HTTPException(status_code=429, detail="Please wait before sending another message")
-    await db.contact_rate_limits.insert_one({"ip": client_ip, "created_at": datetime.now(timezone.utc)})
     submission = ContactSubmissionResponse(
         id=str(uuid.uuid4()),
         created_at=datetime.now(timezone.utc).isoformat(),

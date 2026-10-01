@@ -1,31 +1,47 @@
-# Ved Portfolio — Product Record
+# PRD — Vedanshkumar Gothi Portfolio
 
 ## Original problem statement
-Build a production-quality personal portfolio website for Vedanshkumar Gothi (Ved), a multidisciplinary creative spanning UI/UX, AI video, video editing, motion, and graphic design. It must have a dark editorial visual system, responsive accessible home/work/case-study pages, a backend-backed contact form, and an easy-to-edit project catalog with clearly marked placeholders and no invented claims.
+Build a production-quality personal portfolio website for a multi-disciplinary creative (Vedanshkumar Gothi).
+- Tech: React + Tailwind + Framer Motion (Lenis smooth scroll).
+- Design: Dark editorial look (#0A0A0B background, off-white text, lime accent #C6FF3D, glass cards). Oversized typography, custom cursor, responsive.
+- Pages: Home, /work (filterable grid), /work/:slug (case study template), Contact form saving to backend.
+- Features: WebGL/canvas smoke-fog shader background, simple CMS via JSON/DB for projects.
 
-## Architecture decisions
-- React Router powers `/`, `/work`, and `/work/:slug`.
-- Projects are maintained in `/app/frontend/src/data/projects.js` for simple content editing.
-- FastAPI + MongoDB store contact submissions through `POST /api/contact`.
-- Framer Motion and a lightweight canvas smoke field provide motion; reduced-motion users receive a CSS gradient fallback.
-- Existing protected environment variables remain unchanged; frontend uses `REACT_APP_BACKEND_URL`.
+## User personas
+- Recruiters / hiring managers evaluating Vedansh for UI/UX and motion roles.
+- Potential freelance clients (brands, studios) who want to start a project enquiry.
+- Creative peers browsing selected work and experiments.
+
+## Architecture
+- Frontend: React 19 + react-router-dom 7, framer-motion 11 (scroll reveals, masked hero reveal, parallax, custom cursor, intro loader), Lenis 1.3 smooth scroll, custom CSS (src/App.css), Space Grotesk + Instrument Serif + JetBrains Mono.
+- Backend: FastAPI (server.py) + Motor (async MongoDB). API prefix /api.
+- Data: projects in src/data/projects.js (JSON CMS-style); contact submissions in MongoDB `contact_submissions`.
+
+## Core requirements (static)
+1. Home page with kinetic hero (masked line-by-line name reveal, smoke-fog canvas, orbit, parallax).
+2. /work filterable project grid.
+3. /work/:slug case study template (hero media, role, tools, status, process, gallery, next project, optional video link).
+4. Contact form persisting to backend, honeypot spam protection, NO rate limiting (user request).
+5. Bottom floating pill navigation + floating "Start a project" shortcut.
+6. Dark editorial contact section (green full-bleed version replaced per user request).
+7. Custom cursor, scroll progress bar, intro loader, slow editorial marquee, grain overlay.
+8. SVG favicon mark (lime asterisk on dark) matching wordmark motif.
 
 ## Implemented
-- Dark editorial portfolio with lime accent, grain, hairline borders, animated marquee, responsive navigation, and accessible focus states.
-- Home sections: hero, roles/tools, selected work, services, approach, experience/education, contact.
-- Filterable work archive across all requested categories.
-- Reusable project detail template with role, tools, process, media notes, gallery, and next-project navigation.
-- Ved’s supplied identity, email, LinkedIn, education, internship, community work, and philosophy.
-- Two supplied project concepts plus five clearly labeled placeholder studies.
-- Contact form validation and persistence API.
-- Updated navigation with Work, Services, Experiments, About, and Contact; removed visible section/service numbering across the page.
-- Added resume CTA linking to Ved’s supplied Google Drive URL.
-- Added animated hero letter reveal, orbiting motion graphic, spark pulse, and pointer-responsive smoke field.
-- Added hidden honeypot protection plus shared MongoDB-backed contact throttling: three submissions per forwarded IP within five minutes.
-- Lint, build, backend compile, and browser regression testing completed successfully.
+- 2026-07-01 (this session): Fixed blocking lint errors (unused `Request` param in server.py; pointerX/pointerY scope bug in SmokeCanvas — pointer tracking moved to window listener so smoke actually follows the cursor).
+- 2026-07-01: Full award-polish pass — Lenis, custom cursor, intro loader, masked hero reveal, scroll progress, global grain, redesigned dark contact section with glass form, floating pill nav + contact float styled (CSS was missing), serif italic accents (Instrument Serif), SVG favicon, page title/meta, pill buttons, project image clipped-frame + spotlight hover, process rows numbered, seamless duplicated marquee, mobile hero clipping fixed (375px).
+- Earlier sessions: scaffolding, backend API + MongoDB, routing, project data, resume link, honeypot protection, rate limiter removed.
 
-## Prioritized backlog
-- P0: Replace placeholder project titles, thumbnails, tools, and links with Ved’s real work as they become available.
-- P1: Add optional embedded video URL support to the project data schema and detail template.
-- P1: Add contact submission rate limiting and spam protection before public launch.
-- P2: Add the final resume link and exact AI tool list.
+## Verified
+- POST /api/contact: 3 consecutive 200s (no rate limit); honeypot-filled submission → 400.
+- UI end-to-end: filled and submitted contact form in browser, success message shown, document confirmed in MongoDB.
+- Screenshots at 1366/768/375 for home, /work, filter interaction, /work/:slug, contact section.
+
+## Backlog
+- P1: Replace placeholder project media with real work (user supplies).
+- P1: Add real video_url entries to projects to activate the case-study film block.
+- P2: Optional CMS admin to edit projects JSON via DB instead of code.
+- P2: Email notification on new contact enquiry (Resend integration).
+
+## Test credentials
+- None required — no authentication in this app. See /app/memory/test_credentials.md.
