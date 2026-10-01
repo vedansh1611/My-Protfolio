@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="1.446" timestamp="2026-10-01T13:44:24.880357+00:00" hostname="agent-env-1f490961-ee7f-4eb7-b896-36dd2b903cdc"><testcase classname="tests.test_portfolio_api" name="test_contact_create_and_validation" time="0.238" /><testcase classname="tests.test_portfolio_api" name="test_api_root_and_status_collection" time="0.223" /><testcase classname="tests.test_portfolio_api" name="test_contact_honeypot_rejected" time="0.090" /><testcase classname="tests.test_portfolio_api" name="test_contact_rate_limit_after_three_attempts" time="0.342"><failure message="AssertionError: assert [200, 200, 429, 200] == [200, 200, 200, 429]&#10;  &#10;  At index 2 diff: 429 != 200&#10;  &#10;  Full diff:&#10;    [&#10;        200,&#10;        200,...&#10;  &#10;  ...Full output truncated (4 lines hidden), use '-vv' to show">backend/tests/test_portfolio_api.py:59: in test_contact_rate_limit_after_three_attempts
+    assert [response.status_code for response in responses] == [200, 200, 200, 429]
+E   AssertionError: assert [200, 200, 429, 200] == [200, 200, 200, 429]
+E     
+E     At index 2 diff: 429 != 200
+E     
+E     Full diff:
+E       [
+E           200,
+E           200,...
+E     
+E     ...Full output truncated (4 lines hidden), use '-vv' to show</failure></testcase></testsuite></testsuites>

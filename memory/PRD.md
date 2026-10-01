@@ -18,6 +18,10 @@ Build a production-quality personal portfolio website for Vedanshkumar Gothi (Ve
 - Ved’s supplied identity, email, LinkedIn, education, internship, community work, and philosophy.
 - Two supplied project concepts plus five clearly labeled placeholder studies.
 - Contact form validation and persistence API.
+- Updated navigation with Work, Services, Experiments, About, and Contact; removed visible section/service numbering across the page.
+- Added resume CTA linking to Ved’s supplied Google Drive URL.
+- Added animated hero letter reveal, orbiting motion graphic, spark pulse, and pointer-responsive smoke field.
+- Added hidden honeypot protection plus shared MongoDB-backed contact throttling: three submissions per forwarded IP within five minutes.
 - Lint, build, backend compile, and browser regression testing completed successfully.
 
 ## Prioritized backlog

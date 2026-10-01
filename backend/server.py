@@ -8,8 +8,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 import uuid
-import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 
 ROOT_DIR = Path(__file__).parent
@@ -49,8 +48,6 @@ class ContactSubmissionResponse(ContactSubmission):
     id: str
     created_at: str
 
-contact_attempts = {}
-
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
@@ -60,12 +57,13 @@ async def root():
 async def create_contact_submission(input: ContactSubmission, request: Request):
     if input.website:
         raise HTTPException(status_code=400, detail="Spam check failed")
-    client_ip = request.client.host if request.client else "unknown"
-    now = time.monotonic()
-    recent = [stamp for stamp in contact_attempts.get(client_ip, []) if now - stamp < 300]
-    if len(recent) >= 3:
+    forwarded_for = request.headers.get("x-forwarded-for", "")
+    client_ip = forwarded_for.split(",")[0].strip() or (request.client.host if request.client else "unknown")
+    cutoff = datetime.now(timezone.utc) - timedelta(minutes=5)
+    recent_count = await db.contact_rate_limits.count_documents({"ip": client_ip, "created_at": {"$gt": cutoff}})
+    if recent_count >= 3:
         raise HTTPException(status_code=429, detail="Please wait before sending another message")
-    contact_attempts[client_ip] = [*recent, now]
+    await db.contact_rate_limits.insert_one({"ip": client_ip, "created_at": datetime.now(timezone.utc)})
     submission = ContactSubmissionResponse(
         id=str(uuid.uuid4()),
         created_at=datetime.now(timezone.utc).isoformat(),

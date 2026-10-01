@@ -26,11 +26,11 @@ export const projects = [
     gallery: ["https://images.unsplash.com/photo-1655928461456-b5c6db979360?q=85&w=1200&auto=format&fit=crop"],
   },
   ...[
-    ["AI visual study 01", "AI Video", "A space reserved for an AI-directed visual experiment.", ["Runway", "PLACEHOLDER TOOL"]],
-    ["AI visual study 02", "AI Video", "A future moving-image project will live here.", ["PLACEHOLDER TOOL"]],
-    ["Editing reel / 01", "Video Editing", "A placeholder for a cut, rhythm study or short film.", ["DaVinci Resolve", "After Effects"]],
-    ["Poster series / 01", "Graphic", "A placeholder for a graphic language, poster series or identity study.", ["Illustrator", "Photoshop"]],
-    ["Motion study / 01", "Motion", "A placeholder for a motion system, title sequence or kinetic type study.", ["After Effects", "Blender"]],
+    ["AI visual study", "AI Video", "A space reserved for an AI-directed visual experiment.", ["Runway", "PLACEHOLDER TOOL"]],
+    ["AI visual study / alternate", "AI Video", "A future moving-image project will live here.", ["PLACEHOLDER TOOL"]],
+    ["Editing reel", "Video Editing", "A placeholder for a cut, rhythm study or short film.", ["DaVinci Resolve", "After Effects"]],
+    ["Poster series", "Graphic", "A placeholder for a graphic language, poster series or identity study.", ["Illustrator", "Photoshop"]],
+    ["Motion study", "Motion", "A placeholder for a motion system, title sequence or kinetic type study.", ["After Effects", "Blender"]],
   ].map(([title, category, description, tools], index) => ({
     slug: `${category.toLowerCase().replace(" ", "-")}-${index + 1}`,
     title, category, year: "TBD", description, role: "Independent practice", tools,
