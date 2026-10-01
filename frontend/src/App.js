@@ -190,6 +190,7 @@ function ProjectCard({ project, index }) {
         <div className="project-image">
           <img src={project.thumbnail} alt={`${project.title} project visual`} loading="lazy" />
           {project.isPlaceholder && <span className="placeholder-tag" data-testid={`placeholder-media-${project.slug}`}>Media placeholder</span>}
+          {project.video_url && <span className="card-play" aria-hidden="true"><Play size={13} fill="currentColor" /></span>}
           <span className="view-pill">View <ArrowUpRight size={14} /></span>
         </div>
         <div className="project-meta">
@@ -421,9 +422,9 @@ function ProjectDetail() {
         <div><span className="mono">STATUS</span><p>{project.isPlaceholder ? "Placeholder study" : "Selected case study"}</p></div>
       </Reveal>
       {project.video_url && (
-        <Reveal className="detail-video">
+        <Reveal className="detail-video" data-testid="project-video">
           <span className="mono">FILM / MOTION</span>
-          <a href={project.video_url} target="_blank" rel="noreferrer" data-testid="project-video-link">Watch the film <ArrowUpRight size={18} /></a>
+          <video src={project.video_url} poster={project.thumbnail} controls playsInline preload="metadata" data-testid="project-video-player" />
         </Reveal>
       )}
       {project.highlights && (
