@@ -87,9 +87,9 @@ em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-s
 .text-link{display:flex;gap:10px;align-items:center}
 
 /* marquee */
-.marquee-section{border-bottom:1px solid var(--line);border-top:1px solid var(--line);overflow:hidden}
-.marquee{display:flex;width:max-content;animation:marquee var(--speed,22s) linear infinite;will-change:transform;padding:20px 0}
-.marquee + .marquee{border-top:1px solid var(--line)}
+.marquee-section{padding:64px 0;overflow:hidden}
+.marquee-tilt{transform:rotate(-3deg);width:112vw;margin-left:-6vw;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 18px 50px rgba(30,20,60,.06)}
+.marquee{display:flex;width:max-content;animation:marquee 22s linear infinite;will-change:transform;padding:18px 0}
 .marquee-track{display:flex;align-items:center;gap:64px;padding-right:64px}
 .marquee-track span{display:flex;align-items:center;gap:64px;white-space:nowrap;font:11px 'JetBrains Mono',monospace;letter-spacing:.22em;color:var(--muted)}
 .marquee-track b{color:var(--violet);font-size:14px}
