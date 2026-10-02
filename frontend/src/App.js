@@ -226,14 +226,12 @@ function Home() {
       </section>
 
       <section className="marquee-section" data-testid="tools-section">
-        <div className="marquee-tilt">
-          <div className="marquee">
-            {[0, 1].map((copy) => (
-              <div className="marquee-track" key={copy} aria-hidden={copy === 1}>
-                {tools.map((t) => <span key={t}>{t} <b>✳</b></span>)}
-              </div>
-            ))}
-          </div>
+        <div className="marquee">
+          {[0, 1].map((copy) => (
+            <div className="marquee-track" key={copy} aria-hidden={copy === 1}>
+              {tools.map((t) => <span key={t}>{t} <b>✳</b></span>)}
+            </div>
+          ))}
         </div>
       </section>
 
