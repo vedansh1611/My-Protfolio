@@ -270,7 +270,7 @@ function Home() {
               <div className="about-links">
                 <a href="https://www.linkedin.com/in/vedanshkumargothi/" target="_blank" rel="noreferrer" data-testid="linkedin-link">LinkedIn <ArrowUpRight size={15} /></a>
                 <a href="mailto:vedanshpatel1611@gmail.com" data-testid="about-email-link">Email me <ArrowUpRight size={15} /></a>
-                <a href="https://drive.google.com/file/d/1opKsLNoVtbSsCBvVGEx072IA_EAWKvMW/view?usp=sharing" target="_blank" rel="noreferrer" data-testid="resume-link">Resume <ArrowUpRight size={15} /></a>
+                <a href="/vedansh-gothi-resume.pdf" target="_blank" rel="noreferrer" data-testid="resume-link">Resume <ArrowUpRight size={15} /></a>
               </div>
             </div>
           </Reveal>
