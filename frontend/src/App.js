@@ -298,21 +298,36 @@ function Contact() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const submit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(false);
-    try {
-      await axios.post(`${API}/contact`, form);
-      setSent(true);
-      setForm({ name: "", email: "", project_type: "", message: "", website: "" });
-    } catch {
-      setSent(false);
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+ const submit = async (e) => {
+  e.preventDefault();
+  if (form.website) { setSent(true); return; } // honeypot: only bots fill this
+  setLoading(true);
+  setError(false);
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: "YOUR_ACCESS_KEY",
+        subject: `New portfolio enquiry from ${form.name}`,
+        from_name: "Portfolio contact form",
+        name: form.name,
+        email: form.email,
+        project_type: form.project_type,
+        message: form.message,
+      }),
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+    setSent(true);
+    setForm({ name: "", email: "", project_type: "", message: "", website: "" });
+  } catch {
+    setSent(false);
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <section className="section contact" id="contact">
       <Reveal><SectionLabel number="4">GET IN TOUCH</SectionLabel></Reveal>
