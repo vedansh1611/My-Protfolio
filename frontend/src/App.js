@@ -342,7 +342,7 @@ function Contact() {
           <a className="email-display" href="mailto:vedanshpatel1611@gmail.com" data-testid="direct-email-link">vedanshpatel1611@gmail.com <ArrowUpRight /></a>
           <div className="contact-links">
             <a href="https://www.linkedin.com/in/vedanshkumargothi/" target="_blank" rel="noreferrer" data-testid="contact-linkedin-link">LinkedIn <ArrowUpRight size={15} /></a>
-            <a href="https:"/vedansh-gothi-resume.pdf" target="_blank" rel="noreferrer" data-testid="contact-resume-link">Resume <ArrowUpRight size={15} /></a>
+            <a href="/vedansh-gothi-resume.pdf" target="_blank" rel="noreferrer" data-testid="contact-resume-link">Resume <ArrowUpRight size={15} /></a>
           </div>
         </Reveal>
         <Reveal delay={0.12}>
