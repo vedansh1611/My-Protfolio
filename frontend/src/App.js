@@ -226,13 +226,15 @@ function Home() {
       </section>
 
       <section className="marquee-section" data-testid="tools-section">
-        <div className="marquee">
-          {[0, 1].map((copy) => (
-            <div className="marquee-track" key={copy} aria-hidden={copy === 1}>
-              {tools.map((t) => <span key={t}>{t} <b>✳</b></span>)}
-            </div>
-          ))}
-        </div>
+        {[20, 27, 34].map((speed, row) => (
+          <div className="marquee" style={{ "--speed": `${speed}s` }} key={row} aria-hidden={row > 0}>
+            {[0, 1].map((copy) => (
+              <div className="marquee-track" key={copy} aria-hidden={copy === 1}>
+                {tools.map((t) => <span key={t}>{t} <b>✳</b></span>)}
+              </div>
+            ))}
+          </div>
+        ))}
       </section>
 
       <section className="section featured" id="work">
