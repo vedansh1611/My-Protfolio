@@ -14,11 +14,21 @@ em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-s
 @media(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
 
 /* loader */
-.loader{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.loader-mark{font:700 38px/1 'Sora',sans-serif;letter-spacing:-.06em;color:var(--ink)}
-.loader-mark span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:15px;vertical-align:top;margin-left:4px}
-.loader-sub{font:10px 'JetBrains Mono',monospace;letter-spacing:.34em;color:var(--muted)}
-
+.dot-loader{position:relative;width:2.5em;height:2.5em;font-size:16px;margin-top:34px;transform:rotate(165deg)}
+.dot-loader:before,.dot-loader:after{content:"";position:absolute;top:50%;left:50%;display:block;width:.5em;height:.5em;border-radius:.25em;transform:translate(-50%,-50%)}
+.dot-loader:before{animation:ved-before 1s infinite}
+.dot-loader:after{animation:ved-after 1s infinite}
+@keyframes ved-before{
+0%{width:.5em;box-shadow:1em -.5em rgba(14,210,218,.9),-1em .5em rgba(95,41,199,.9)}
+35%{width:2.5em;box-shadow:0 -.5em rgba(14,210,218,.9),0 .5em rgba(95,41,199,.9)}
+70%{width:.5em;box-shadow:-1em -.5em rgba(14,210,218,.9),1em .5em rgba(95,41,199,.9)}
+100%{box-shadow:1em -.5em rgba(14,210,218,.9),-1em .5em rgba(95,41,199,.9)}}
+@keyframes ved-after{
+0%{height:.5em;box-shadow:.5em 1em rgba(54,126,208,.9),-.5em -1em rgba(155,110,235,.9)}
+35%{height:2.5em;box-shadow:.5em 0 rgba(54,126,208,.9),-.5em 0 rgba(155,110,235,.9)}
+70%{height:.5em;box-shadow:.5em -1em rgba(54,126,208,.9),-.5em 1em rgba(155,110,235,.9)}
+100%{box-shadow:.5em 1em rgba(54,126,208,.9),-.5em -1em rgba(155,110,235,.9)}}
+@media (prefers-reduced-motion:reduce){.dot-loader:before,.dot-loader:after{animation:none}}
 /* grain + progress */
 .grain{position:fixed;inset:-60%;width:220%;height:220%;z-index:70;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");animation:grainShift 9s steps(6) infinite}
 @keyframes grainShift{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-5%,-2%)}80%{transform:translate(4%,4%)}100%{transform:translate(0,0)}}
