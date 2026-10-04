@@ -67,7 +67,7 @@ function Loader({ show }) {
   return (
     <AnimatePresence>
       {show && (
-        <motion.div className="loader" exit={{ y: "-100%" }} transition={{ duration: 0.6, ease: EASE }} data-testid="intro-loader">
+        <motion.div className="loader" exit={{ y: "-100%" }} transition={{ duration: 0.9, ease: EASE }} data-testid="intro-loader">
           <motion.span className="loader-mark" initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>VED<span>©</span></motion.span>
           <motion.span className="loader-sub" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.5 }}>PORTFOLIO — MMXXVI</motion.span>
         </motion.div>
@@ -430,7 +430,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   useLenis();
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1000);
+    const t = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(t);
   }, []);
   return (
